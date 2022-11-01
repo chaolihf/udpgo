@@ -1,4 +1,4 @@
-module gitee.com/telhello1/udpgo
+module github.com/chaolihf/udpgo
 
 go 1.18
 
