@@ -17,7 +17,7 @@ func (t *KafkaProducer) SendMesssage(content []byte, topic string, keyType strin
 	return err
 }
 
-func initKafka(servers []string) KafkaProducer {
+func InitKafka(servers []string) KafkaProducer {
 	config := sarama.NewConfig()
 	config.Producer.Return.Successes = true
 	config.Producer.RequiredAcks = sarama.WaitForAll
