@@ -1,4 +1,4 @@
-module github.com/chaolihf/udpgo
+module github.com/chaolihf/udpgo/v0.0.1
 
 go 1.18
 
