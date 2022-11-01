@@ -86,9 +86,9 @@ func outputPart(line *strings.Builder, value any, stage ParseState, isValue bool
 	default:
 		{
 			if stage == Field && isValue {
-				switch value.(type) {
+				switch v := value.(type) {
 				case string:
-					content := value.(string)
+					content := string(v)
 					line.WriteRune(DoubleQuote)
 					for _, ch := range content {
 						if ch == DoubleQuote || ch == Backslash {
@@ -98,13 +98,13 @@ func outputPart(line *strings.Builder, value any, stage ParseState, isValue bool
 					}
 					line.WriteRune(DoubleQuote)
 				case int:
-					line.WriteString(strconv.Itoa(value.(int)))
+					line.WriteString(strconv.Itoa(int(v)))
 					line.WriteRune('i')
 				case int64:
-					line.WriteString(strconv.FormatInt(value.(int64), 10))
+					line.WriteString(strconv.FormatInt(int64(v), 10))
 					line.WriteRune('u')
 				case float64:
-					line.WriteString(strconv.FormatFloat(value.(float64), 'f', 5, 64))
+					line.WriteString(strconv.FormatFloat(float64(v), 'f', 5, 64))
 				case bool:
 					if value.(bool) {
 						line.WriteRune('t')
