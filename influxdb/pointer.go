@@ -102,6 +102,9 @@ func outputPart(line *strings.Builder, value any, stage ParseState, isValue bool
 					line.WriteRune('i')
 				case int64:
 					line.WriteString(strconv.FormatInt(int64(v), 10))
+					line.WriteRune('i')
+				case uint64:
+					line.WriteString(strconv.FormatUint(uint64(v), 10))
 					line.WriteRune('u')
 				case float64:
 					line.WriteString(strconv.FormatFloat(float64(v), 'f', 5, 64))
