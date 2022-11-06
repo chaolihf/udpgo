@@ -3,7 +3,7 @@
 #### Description
 unified develpment platform (golang)
 
-1: integrate log function 
+1: integrate log,string function 
 2: integrate kafka procuder function
 3: integrate influxdb line protocol function
 
@@ -20,8 +20,7 @@ unified develpment platform (golang)
 #### Contribution
 
 
+#### Feature
 
-
-#### Gitee Feature
-
-
+#### Change Log
+v0.0.5 add string function: LeftString ,get part string  
