@@ -1,6 +1,8 @@
 package lang
 
-import "go.uber.org/zap"
+import (
+	"go.uber.org/zap"
+)
 
 func InitLogger() *zap.Logger {
 	logger, _ := zap.NewProduction()
@@ -8,7 +10,7 @@ func InitLogger() *zap.Logger {
 	return logger
 }
 
-//@title return left string ,support utf-8 and without panic when outbound
+// @title return left string ,support utf-8 and without panic when outbound
 func LeftString(data string, count int) string {
 	if len(data) <= count {
 		return data

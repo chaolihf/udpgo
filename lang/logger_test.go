@@ -1,6 +1,8 @@
 package lang
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestLogger(t *testing.T) {
 	logger := InitLogger()
