@@ -24,3 +24,4 @@ unified develpment platform (golang)
 
 #### Change Log
 v0.0.5 add string function: LeftString ,get part string  
+v0.0.7 base on gojson(https://github.com/ChengjinWu/gojson.git), add modify json and serial to json string 

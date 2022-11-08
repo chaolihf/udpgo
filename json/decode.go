@@ -1,4 +1,4 @@
-// Copyright 2010 The Go Authors. All rights reserved.
+﻿// Copyright 2010 The Go Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -84,13 +84,14 @@ const INT64_MAX = int64(^uint64(0) >> 1)
 //
 // The JSON null value unmarshals into an interface, map, pointer, or slice
 // by setting that Go value to nil. Because null is often used in JSON to mean
-// “not present,” unmarshaling a JSON null into any other Go type has no effect
+// ``not present,'' unmarshaling a JSON null into any other Go type has no effect
 // on the value and produces no error.
 //
 // When unmarshaling quoted strings, invalid UTF-8 or
 // invalid UTF-16 surrogate pairs are not treated as an error.
 // Instead, they are replaced by the Unicode replacement
 // character U+FFFD.
+//
 func FromBytes(data []byte) (*JsonObject, error) {
 	// Check for well-formedness.
 	// Avoids filling out half a data structure
@@ -637,12 +638,12 @@ func (d *decodeState) literalStore(item []byte) *JsonObject {
 				d.saveError(&UnmarshalTypeError{Value: "number " + s, Offset: int64(d.off)})
 				break
 			}
-			if n > int64(INT32_MAX) {
+			if n > int64(INT32_MAX){
 				return &JsonObject{
 					Value: n,
 					VType: reflect.Int64,
 				}
-			} else {
+			}else {
 				return &JsonObject{
 					Value: n,
 					VType: reflect.Int32,

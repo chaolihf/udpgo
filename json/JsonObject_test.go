@@ -6,12 +6,17 @@ import (
 )
 
 func TestJson(t *testing.T) {
-	data := `{"id":524042,"name":"酷旅-mob-otv-2","male":true,"other":null}`
-	object, err := FromBytes([]byte(data))
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		//object.GetJsonObject("id").Value = "aaaa"
-		fmt.Println(object.String())
+	data := `{"id":1,"name":"中文","isOk":true,"f":1.2,"t":null}`
+	object, _ := FromBytes([]byte(data))
+	fmt.Println(object.String())
+
+	json1 := new(JsonObject).New()
+	fmt.Println(json1.String())
+	json2 := new(JsonObject).New()
+	fmt.Println(json2.String())
+	fmt.Println(ArrayString([]*JsonObject{json1, json2}))
+	if object.GetString("name") != "中文" {
+		t.Fatal("name compare")
 	}
+
 }

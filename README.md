@@ -28,5 +28,5 @@
 #### 变更
 v0.0.5 增加字符串功能: LeftString , 支持utf-8字符串截取，并且不会当索引超过长度不会报异常
 
-
+v0.0.7 基于gojson(https://github.com/ChengjinWu/gojson.git),增加修改和序列化功能
 
