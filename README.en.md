@@ -6,11 +6,13 @@ unified develpment platform (golang)
 1: integrate log,string function 
 2: integrate kafka procuder function
 3: integrate influxdb line protocol function
+4: string and other helper functions 
 
 #### Software Architecture
 
 #### Installation
 
+go get github.com/chaolihf/udpgo
 
 
 #### Instructions
