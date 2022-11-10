@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"fmt"
 
 	remote "github.com/chaolihf/udpgo/com.chinatelecom.udp.grpc"
 	"google.golang.org/grpc"
@@ -41,7 +40,6 @@ func (c *RemoteClient) Connect(address string) error {
 }
 
 func (c *RemoteClient) CallService(code string, method string, version uint32, sequence uint32, data []byte) (string, error) {
-	fmt.Println("aa")
 	request := remote.ServiceRequest{}
 	request.ServiceName = code
 	request.MethodName = method

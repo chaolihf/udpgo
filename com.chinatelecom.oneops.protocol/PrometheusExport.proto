@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package main;
+
+option go_package = "com/chinatelecom/oneops/protocol/prometheus";
+option java_multiple_files = true;
+option java_package = "com.chinatelecom.oneops.protocol.prometheus";
+
+message MetricData {
+    //指标名称
+    string name=1;
+    //指标值
+    string value=2;
+    //属性参数
+    repeated LabelNameData labels=3;
+}
+
+message LabelNameData {
+    //属性名称
+    string key=1;
+    //属性值
+    string name=2;
+}
+
+message MetricsData {
+    //采集时间
+    int64 receiveTime=1;
+    //监控对象的唯一标志
+    string monitorObject=2;
+    //监控对象的类型
+    string monitorType=3;
+    //收集器的唯一标志
+    string collector=4;
+    repeated MetricData datas=5;
+}
+
+
+
