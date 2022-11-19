@@ -34,3 +34,5 @@ v0.0.5 增加字符串功能: LeftString , 支持utf-8字符串截取，并且�
 v0.0.7 基于gojson(https://github.com/ChengjinWu/gojson.git),增加修改和序列化功能
 
 v0.0.9 增加格式化字符串替换
+
+v0.0.10 修复json数组，字符串等获取错误，增加keys方法

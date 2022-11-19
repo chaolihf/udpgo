@@ -13,11 +13,20 @@ type JsonObject struct {
 	VType      reflect.Kind
 }
 
-func (j *JsonObject) GetJsonArray() []*JsonObject {
+func (j *JsonObject) getJsonArray() []*JsonObject {
 	if j == nil && j.VType != reflect.Slice {
 		return nil
 	}
 	return j.Value.([]*JsonObject)
+}
+
+func (j *JsonObject) GetJsonArray(key string) []*JsonObject {
+	jsonArray := j.GetJsonObject(key)
+	if jsonArray != nil {
+		return jsonArray.getJsonArray()
+	} else {
+		return nil
+	}
 }
 
 func (j *JsonObject) New() *JsonObject {
@@ -30,7 +39,7 @@ func (j *JsonObject) GetString(key string) string {
 		return ""
 	}
 	itemValue := j.Attributes[key]
-	if itemValue == nil && itemValue.VType != reflect.String {
+	if itemValue == nil || itemValue.VType != reflect.String {
 		return ""
 	}
 	return itemValue.Value.(string)
@@ -51,7 +60,7 @@ func (j *JsonObject) GetInt(key string) int {
 		return 0
 	}
 	itemValue := j.Attributes[key]
-	if itemValue == nil && itemValue.VType != reflect.Int {
+	if itemValue == nil || itemValue.VType != reflect.Int {
 		return 0
 	}
 	return itemValue.Value.(int)
@@ -72,7 +81,7 @@ func (j *JsonObject) GetLong(key string) int64 {
 		return 0
 	}
 	itemValue := j.Attributes[key]
-	if itemValue == nil && itemValue.VType != reflect.Int64 {
+	if itemValue == nil || itemValue.VType != reflect.Int64 {
 		return 0
 	}
 	return itemValue.Value.(int64)
@@ -93,7 +102,7 @@ func (j *JsonObject) GetFloat(key string) float64 {
 		return 0
 	}
 	itemValue := j.Attributes[key]
-	if itemValue == nil && itemValue.VType != reflect.Float64 {
+	if itemValue == nil || itemValue.VType != reflect.Float64 {
 		return 0
 	}
 	return itemValue.Value.(float64)
@@ -114,7 +123,7 @@ func (j *JsonObject) GetBool(key string) bool {
 		return false
 	}
 	itemValue := j.Attributes[key]
-	if itemValue == nil && itemValue.VType != reflect.Bool {
+	if itemValue == nil || itemValue.VType != reflect.Bool {
 		return false
 	}
 	return itemValue.Value.(bool)
@@ -156,6 +165,14 @@ func (j *JsonObject) PutJsonArray(key string, value []JsonObject) {
 	} else {
 		j.Attributes[key] = &JsonObject{VType: reflect.Slice, Value: value}
 	}
+}
+
+func (j *JsonObject) GetKeys() []string {
+	var keys = []string{}
+	for key, _ := range j.Attributes {
+		keys = append(keys, key)
+	}
+	return keys
 }
 
 func (j *JsonObject) String() string {

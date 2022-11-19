@@ -27,3 +27,4 @@ go get github.com/chaolihf/udpgo
 #### Change Log
 v0.0.5 add string function: LeftString ,get part string  
 v0.0.7 base on gojson(https://github.com/ChengjinWu/gojson.git), add modify json and serial to json string 
+v0.0.10 fix json array , GetString(); add future: Keys method
