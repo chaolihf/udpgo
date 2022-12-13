@@ -3,7 +3,9 @@ package lang
 import (
 	"strings"
 
+	"github.com/natefinch/lumberjack"
 	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 type FormatStringer struct {
@@ -129,6 +131,27 @@ func (f *FormatStringer) ReplaceAll(paramName string, newValue string) {
 func InitLogger() *zap.Logger {
 	logger, _ := zap.NewProduction()
 	defer logger.Sync()
+	return logger
+}
+
+// @param logFileName 日志文件存放目录
+// param maxSize 文件大小限制,单位MB
+// param maxBackups 最大保留日志文件数量
+// param maxAge 日志文件保留天数
+func InitProductLogger(logFileName string, maxSize int, maxBackups int, maxAge int) *zap.Logger {
+	encoderConfig := zap.NewProductionEncoderConfig()
+	encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+	encoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder
+	encoder := zapcore.NewJSONEncoder(encoderConfig)
+	fileWriteSyncer := zapcore.AddSync(&lumberjack.Logger{
+		Filename:   logFileName,
+		MaxSize:    maxSize,
+		MaxBackups: maxBackups,
+		MaxAge:     maxAge,
+		Compress:   false,
+	})
+	fileCore := zapcore.NewCore(encoder, fileWriteSyncer, zapcore.InfoLevel)
+	logger := zap.New(fileCore, zap.AddCaller())
 	return logger
 }
 
