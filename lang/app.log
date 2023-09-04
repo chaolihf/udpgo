@@ -1,0 +1,2 @@
+{"level":"INFO","ts":"2022-12-13T10:02:22.111+0800","caller":"lang/logger_test.go:14","msg":"info"}
+{"level":"ERROR","ts":"2022-12-13T10:02:22.136+0800","caller":"lang/logger_test.go:16","msg":"error"}

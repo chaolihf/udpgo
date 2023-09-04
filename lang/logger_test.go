@@ -9,6 +9,13 @@ func TestLogger(t *testing.T) {
 	logger.Info("aa")
 }
 
+func TestProductLogger(t *testing.T) {
+	logger := InitProductLogger("app.log", 1, 1, 1)
+	logger.Info("info")
+	logger.Debug("debug")
+	logger.Error("error")
+}
+
 func TestLeft(t *testing.T) {
 	var result string
 	result = LeftString("abc", 1)
