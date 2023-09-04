@@ -60,6 +60,13 @@ func (j *JsonObject) GetString(key string) string {
 	return itemValue.Value.(string)
 }
 
+func (j *JsonObject) GetStringValue() string {
+	if j == nil || j.VType != reflect.String {
+		return ""
+	}
+	return j.Value.(string)
+}
+
 func (j *JsonObject) PutString(key string, value string) {
 	item := j.GetJsonObject(key)
 	if item != nil {
@@ -68,6 +75,11 @@ func (j *JsonObject) PutString(key string, value string) {
 	} else {
 		j.Attributes[key] = &JsonObject{VType: reflect.String, Value: value}
 	}
+}
+
+func (j *JsonObject) PutStringValue(value string) {
+	j.VType = reflect.String
+	j.Value = value
 }
 
 func (j *JsonObject) GetInt(key string) int {
@@ -84,7 +96,18 @@ func (j *JsonObject) GetInt(key string) int {
 	default:
 		return 0
 	}
+}
 
+func (j *JsonObject) GetIntValue() int {
+	if j == nil {
+		return 0
+	}
+	switch j.VType {
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32:
+		return int(j.Value.(int64))
+	default:
+		return 0
+	}
 }
 
 func (j *JsonObject) PutInt(key string, value int) {
@@ -95,6 +118,11 @@ func (j *JsonObject) PutInt(key string, value int) {
 	} else {
 		j.Attributes[key] = &JsonObject{VType: reflect.Int, Value: value}
 	}
+}
+
+func (j *JsonObject) PutIntValue(value int) {
+	j.VType = reflect.Int
+	j.Value = int64(value)
 }
 
 func (j *JsonObject) GetLong(key string) int64 {
@@ -108,6 +136,13 @@ func (j *JsonObject) GetLong(key string) int64 {
 	return itemValue.Value.(int64)
 }
 
+func (j *JsonObject) GetLongValue() int64 {
+	if j == nil || (j.VType != reflect.Int64 && j.VType != reflect.Uint64) {
+		return 0
+	}
+	return j.Value.(int64)
+}
+
 func (j *JsonObject) PutLong(key string, value int64) {
 	item := j.GetJsonObject(key)
 	if item != nil {
@@ -116,6 +151,11 @@ func (j *JsonObject) PutLong(key string, value int64) {
 	} else {
 		j.Attributes[key] = &JsonObject{VType: reflect.Int64, Value: value}
 	}
+}
+
+func (j *JsonObject) PutLongValue(value int64) {
+	j.VType = reflect.Int64
+	j.Value = value
 }
 
 func (j *JsonObject) GetFloat(key string) float64 {
@@ -129,6 +169,13 @@ func (j *JsonObject) GetFloat(key string) float64 {
 	return itemValue.Value.(float64)
 }
 
+func (j *JsonObject) GetFloatValue() float64 {
+	if j == nil || j.VType != reflect.Float64 {
+		return 0
+	}
+	return j.Value.(float64)
+}
+
 func (j *JsonObject) PutFloat(key string, value float64) {
 	item := j.GetJsonObject(key)
 	if item != nil {
@@ -137,6 +184,11 @@ func (j *JsonObject) PutFloat(key string, value float64) {
 	} else {
 		j.Attributes[key] = &JsonObject{VType: reflect.Float64, Value: value}
 	}
+}
+
+func (j *JsonObject) PutFloatValue(value float64) {
+	j.VType = reflect.Float64
+	j.Value = value
 }
 
 func (j *JsonObject) GetBool(key string) bool {
@@ -150,6 +202,13 @@ func (j *JsonObject) GetBool(key string) bool {
 	return itemValue.Value.(bool)
 }
 
+func (j *JsonObject) GetBoolValue() bool {
+	if j == nil || j.VType != reflect.Bool {
+		return false
+	}
+	return j.Value.(bool)
+}
+
 func (j *JsonObject) PutBool(key string, value bool) {
 	item := j.GetJsonObject(key)
 	if item != nil {
@@ -158,6 +217,11 @@ func (j *JsonObject) PutBool(key string, value bool) {
 	} else {
 		j.Attributes[key] = &JsonObject{VType: reflect.Bool, Value: value}
 	}
+}
+
+func (j *JsonObject) PutBoolValue(value bool) {
+	j.VType = reflect.Bool
+	j.Value = value
 }
 
 func (j *JsonObject) GetJsonObject(key string) *JsonObject {

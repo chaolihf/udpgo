@@ -28,3 +28,15 @@ func TestJsonArray(t *testing.T) {
 		fmt.Println(item.GetInt("id"))
 	}
 }
+
+func TestJsonObject(t *testing.T) {
+	data := `[1,2]`
+	array, _ := NewJsonArray([]byte(data))
+	newData := JsonObject{}
+	newData.PutIntValue(3)
+	array = append(array, &newData)
+	for _, item := range array {
+		fmt.Println(item.GetIntValue())
+	}
+
+}
