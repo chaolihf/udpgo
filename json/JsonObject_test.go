@@ -20,3 +20,11 @@ func TestJson(t *testing.T) {
 	}
 
 }
+
+func TestJsonArray(t *testing.T) {
+	data := `[{"id":1,"name":"中文","isOk":true,"f":1.2,"t":null}]`
+	array, _ := NewJsonArray([]byte(data))
+	for _, item := range array {
+		fmt.Println(item.GetInt("id"))
+	}
+}

@@ -20,6 +20,21 @@ func (j *JsonObject) getJsonArray() []*JsonObject {
 	return j.Value.([]*JsonObject)
 }
 
+/*
+new json object from bytes
+*/
+func NewJsonObject(data []byte) (*JsonObject, error) {
+	return FromBytes(data)
+}
+
+/*
+new json array from bytes
+*/
+func NewJsonArray(data []byte) ([]*JsonObject, error) {
+	object, err := FromBytes(data)
+	return object.getJsonArray(), err
+}
+
 func (j *JsonObject) GetJsonArray(key string) []*JsonObject {
 	jsonArray := j.GetJsonObject(key)
 	if jsonArray != nil {
@@ -60,10 +75,16 @@ func (j *JsonObject) GetInt(key string) int {
 		return 0
 	}
 	itemValue := j.Attributes[key]
-	if itemValue == nil || itemValue.VType != reflect.Int {
+	if itemValue == nil {
 		return 0
 	}
-	return itemValue.Value.(int)
+	switch itemValue.VType {
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32:
+		return int(itemValue.Value.(int64))
+	default:
+		return 0
+	}
+
 }
 
 func (j *JsonObject) PutInt(key string, value int) {
@@ -81,7 +102,7 @@ func (j *JsonObject) GetLong(key string) int64 {
 		return 0
 	}
 	itemValue := j.Attributes[key]
-	if itemValue == nil || itemValue.VType != reflect.Int64 {
+	if itemValue == nil || (itemValue.VType != reflect.Int64 && itemValue.VType != reflect.Uint64) {
 		return 0
 	}
 	return itemValue.Value.(int64)
