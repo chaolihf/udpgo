@@ -8,13 +8,16 @@ type KafkaProducer struct {
 	producer sarama.SyncProducer
 }
 
-func (t *KafkaProducer) SendMesssage(content []byte, topic string, keyType string) error {
+/*
+send message and return partition,offset
+*/
+func (t *KafkaProducer) SendMesssage(content []byte, topic string, keyType string) (int32, int64, error) {
 	message := &sarama.ProducerMessage{}
 	message.Topic = topic
 	message.Key = sarama.StringEncoder(keyType)
 	message.Value = sarama.ByteEncoder(content)
-	_, _, err := t.producer.SendMessage(message)
-	return err
+	partition, offset, err := t.producer.SendMessage(message)
+	return partition, offset, err
 }
 
 func InitKafka(servers []string) KafkaProducer {

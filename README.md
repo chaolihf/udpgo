@@ -38,3 +38,6 @@ v0.0.9 增加格式化字符串替换
 v0.0.10 修复json数组，字符串等获取错误，增加keys方法
 
 v0.0.11 增加日志文件输出和日期格式调整
+
+v0.0.12 JsonObject对象增加newJsonObject和newJsonArray静态方法;修复getInt,getLong返回数据错误
+        kafkaClient的SendMessage方法返回分区和偏移量参数
