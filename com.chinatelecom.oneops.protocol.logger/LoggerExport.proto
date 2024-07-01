@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package main;
+
+option go_package = "com/chinatelecom/oneops/protocol/logger";
+option java_multiple_files = true;
+option java_package = "com.chinatelecom.oneops.protocol.logger";
+
+//日志数据，一次发送多个表数据
+message LoggerData {
+    //采集时间
+    int64 receiveTime=1;
+    //监控对象的唯一标志
+    string monitorObject=2;
+    //监控对象的类型
+    string monitorType=3;
+    //收集器的唯一标志
+    string collector=4;
+    repeated TableData tableData=5;
+}
+
+//表数据，一个可以插入多条记录
+message TableData {
+    //表名称
+    string tableName=1;
+    //列名称
+    repeated ColumnData columns=2;
+    //字段值
+    repeated RowValue rows=3;
+}
+
+//列属性
+message ColumnData {
+	//字段名称
+	string columnName=1;
+	//字段类型
+	int32 columnType=2;
+}
+
+//对应每列的数据
+message RowValue {
+    repeated FieldValue fieldValue=1;
+}
+
+//每列的具体值
+message FieldValue {
+    oneof data {
+    	int32 i=1;
+    	int64 l=2;
+    	double d=3;
+    	bool b=4;
+    	string s=5;
+    }
+}
