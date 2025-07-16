@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 
-	remote "github.com/chaolihf/udpgo/com.chinatelecom.udp.grpc"
+	remote "github.com/professorshandian/udpgo/com.chinatelecom.udp.grpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
