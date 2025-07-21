@@ -1,16 +1,11 @@
 package kafka
 
 import (
-	"bytes"
 	"crypto/tls"
 	"crypto/x509"
-	"encoding/pem"
 	"os"
-	"strings"
 
 	"github.com/Shopify/sarama"
-
-	keystore "github.com/pavlo-v-chernykh/keystore-go/v4"
 )
 
 type KafkaProducer struct {
@@ -74,70 +69,18 @@ func InitKafkaWithAuth(
 		}
 	}
 
-	// SSL配置（JKS读取）
 	if keystorePath != "" && truststorePath != "" && keystorePassword != "" {
-		// 读取密码
-		pwBytes, err := os.ReadFile(keystorePassword)
-		if err != nil {
-			panic(err)
-		}
-		password := strings.TrimSpace(string(pwBytes))
 
-		// 读取 keystore.jks
-		ksFile, err := os.ReadFile(keystorePath)
+		// 加载证书和私钥
+		keyPair, err := tls.LoadX509KeyPair(keystorePath, keystorePassword)
 		if err != nil {
-			panic(err)
-		}
-		ks := keystore.New()
-		if err := ks.Load(bytes.NewReader(ksFile), []byte(password)); err != nil {
-			panic(err)
-		}
-		// 获取第一个私钥别名
-		var keyAlias string
-		for _, alias := range ks.Aliases() {
-			if _, err := ks.GetPrivateKeyEntry(alias, []byte(password)); err == nil {
-				keyAlias = alias
-				break
-			}
-		}
-		if keyAlias == "" {
-			panic("no private key entry found in keystore")
-		}
-		privKeyEntry, err := ks.GetPrivateKeyEntry(keyAlias, []byte(password))
-		if err != nil {
-			panic(err)
-		}
-		// 转为PEM
-		privKeyBlock := pem.Block{Type: "PRIVATE KEY", Bytes: privKeyEntry.PrivateKey}
-		privKeyPEM := pem.EncodeToMemory(&privKeyBlock)
-		certPEM := []byte{}
-		for _, cert := range privKeyEntry.CertificateChain {
-			certBlock := pem.Block{Type: "CERTIFICATE", Bytes: cert.Content}
-			certPEM = append(certPEM, pem.EncodeToMemory(&certBlock)...)
+			panic("加载证书和私钥失败: " + err.Error())
 		}
 
-		// 读取 truststore.jks
-		trustFile, err := os.ReadFile(truststorePath)
+		// 加载CA证书
+		caPEM, err := os.ReadFile(truststorePath)
 		if err != nil {
-			panic(err)
-		}
-		ts := keystore.New()
-		if err := ts.Load(bytes.NewReader(trustFile), []byte(password)); err != nil {
-			panic(err)
-		}
-		caPEM := []byte{}
-		for _, alias := range ts.Aliases() {
-			entry, _ := ts.GetTrustedCertificateEntry(alias)
-			if len(entry.Certificate.Content) > 0 {
-				caBlock := pem.Block{Type: "CERTIFICATE", Bytes: entry.Certificate.Content}
-				caPEM = append(caPEM, pem.EncodeToMemory(&caBlock)...)
-			}
-		}
-
-		// 构造 tls.Certificate
-		keyPair, err := tls.X509KeyPair(certPEM, privKeyPEM)
-		if err != nil {
-			panic(err)
+			panic("加载CA证书失败: " + err.Error())
 		}
 		certPool := x509.NewCertPool()
 		certPool.AppendCertsFromPEM(caPEM)

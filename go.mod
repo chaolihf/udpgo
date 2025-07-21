@@ -7,7 +7,6 @@ require (
 	github.com/containerd/cgroups v1.0.4
 	github.com/natefinch/lumberjack v2.0.0+incompatible
 	github.com/opencontainers/runtime-spec v1.0.2
-	github.com/pavlo-v-chernykh/keystore-go/v4 v4.5.0
 	go.uber.org/zap v1.23.0
 	google.golang.org/grpc v1.50.1
 	google.golang.org/protobuf v1.27.1
