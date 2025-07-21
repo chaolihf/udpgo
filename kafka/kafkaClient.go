@@ -59,11 +59,18 @@ func InitKafkaWithAuth(
 		config.Net.SASL.Enable = true
 		config.Net.SASL.User = saslUser
 		config.Net.SASL.Password = saslPassword
+
 		switch saslMechanism {
 		case "SCRAM-SHA-256":
 			config.Net.SASL.Mechanism = sarama.SASLTypeSCRAMSHA256
+			config.Net.SASL.SCRAMClientGeneratorFunc = func() sarama.SCRAMClient {
+				return &XDGSCRAMClient{HashGeneratorFcn: SHA256}
+			}
 		case "SCRAM-SHA-512":
 			config.Net.SASL.Mechanism = sarama.SASLTypeSCRAMSHA512
+			config.Net.SASL.SCRAMClientGeneratorFunc = func() sarama.SCRAMClient {
+				return &XDGSCRAMClient{HashGeneratorFcn: SHA512}
+			}
 		default:
 			config.Net.SASL.Mechanism = sarama.SASLTypePlaintext
 		}

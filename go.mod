@@ -7,6 +7,7 @@ require (
 	github.com/containerd/cgroups v1.0.4
 	github.com/natefinch/lumberjack v2.0.0+incompatible
 	github.com/opencontainers/runtime-spec v1.0.2
+	github.com/xdg/scram v1.0.5
 	go.uber.org/zap v1.23.0
 	google.golang.org/grpc v1.50.1
 	google.golang.org/protobuf v1.27.1
@@ -34,6 +35,7 @@ require (
 	github.com/klauspost/compress v1.15.11 // indirect
 	github.com/pierrec/lz4/v4 v4.1.17 // indirect
 	github.com/rcrowley/go-metrics v0.0.0-20201227073835-cf1acfcdf475 // indirect
+	github.com/xdg/stringprep v1.0.3 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
 	golang.org/x/crypto v0.0.0-20220722155217-630584e8d5aa // indirect
