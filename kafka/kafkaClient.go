@@ -77,11 +77,18 @@ func InitKafkaWithAuth(
 	}
 
 	if keystorePath != "" && truststorePath != "" && keystorePassword != "" {
+		keyPEM, err := os.ReadFile(keystorePassword)
+		if err != nil {
+			panic("加载私钥文件失败: " + err.Error())
+		}
 
 		// 加载证书和私钥
-		keyPair, err := tls.LoadX509KeyPair(keystorePath, keystorePassword)
+		keyPair, err := tls.X509KeyPair(
+			readFile(keystorePath), // 证书文件内容
+			keyPEM,                 // 私钥文件内容
+		)
 		if err != nil {
-			panic("加载证书和私钥失败: " + err.Error())
+			panic("证书和私钥文件加载失败: " + err.Error())
 		}
 
 		// 加载CA证书

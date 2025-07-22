@@ -4,6 +4,7 @@ import (
 	"crypto/sha256"
 	"crypto/sha512"
 	"hash"
+	"os"
 
 	"github.com/xdg/scram"
 )
@@ -34,4 +35,12 @@ func (x *XDGSCRAMClient) Step(challenge string) (response string, err error) {
 
 func (x *XDGSCRAMClient) Done() bool {
 	return x.ClientConversation.Done()
+}
+
+func readFile(path string) []byte {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		panic("文件读取失败: " + path)
+	}
+	return data
 }
