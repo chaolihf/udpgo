@@ -1,10 +1,6 @@
 package kafka
 
 import (
-	"crypto/tls"
-	"crypto/x509"
-	"os"
-
 	"github.com/Shopify/sarama"
 )
 
@@ -43,9 +39,9 @@ func InitKafkaWithAuth(
 	saslUser string,
 	saslPassword string,
 	saslMechanism string,
-	keystorePath string,
-	keystorePassword string,
-	truststorePath string,
+	// keystorePath string,
+	// keystorePassword string,
+	// truststorePath string,
 ) KafkaProducer {
 	config := sarama.NewConfig()
 
@@ -76,36 +72,36 @@ func InitKafkaWithAuth(
 		}
 	}
 
-	if keystorePath != "" && truststorePath != "" && keystorePassword != "" {
-		keyPEM, err := os.ReadFile(keystorePassword)
-		if err != nil {
-			panic("加载私钥文件失败: " + err.Error())
-		}
+	// if keystorePath != "" && truststorePath != "" && keystorePassword != "" {
+	// 	keyPEM, err := os.ReadFile(keystorePassword)
+	// 	if err != nil {
+	// 		panic("加载私钥文件失败: " + err.Error())
+	// 	}
 
-		// 加载证书和私钥
-		keyPair, err := tls.X509KeyPair(
-			readFile(keystorePath), // 证书文件内容
-			keyPEM,                 // 私钥文件内容
-		)
-		if err != nil {
-			panic("证书和私钥文件加载失败: " + err.Error())
-		}
+	// 	// 加载证书和私钥
+	// 	keyPair, err := tls.X509KeyPair(
+	// 		readFile(keystorePath), // 证书文件内容
+	// 		keyPEM,                 // 私钥文件内容
+	// 	)
+	// 	if err != nil {
+	// 		panic("证书和私钥文件加载失败: " + err.Error())
+	// 	}
 
-		// 加载CA证书
-		caPEM, err := os.ReadFile(truststorePath)
-		if err != nil {
-			panic("加载CA证书失败: " + err.Error())
-		}
-		certPool := x509.NewCertPool()
-		certPool.AppendCertsFromPEM(caPEM)
+	// 	// 加载CA证书
+	// 	caPEM, err := os.ReadFile(truststorePath)
+	// 	if err != nil {
+	// 		panic("加载CA证书失败: " + err.Error())
+	// 	}
+	// 	certPool := x509.NewCertPool()
+	// 	certPool.AppendCertsFromPEM(caPEM)
 
-		config.Net.TLS.Enable = true
-		config.Net.TLS.Config = &tls.Config{
-			Certificates:       []tls.Certificate{keyPair},
-			RootCAs:            certPool,
-			InsecureSkipVerify: false,
-		}
-	}
+	// 	config.Net.TLS.Enable = true
+	// 	config.Net.TLS.Config = &tls.Config{
+	// 		Certificates:       []tls.Certificate{keyPair},
+	// 		RootCAs:            certPool,
+	// 		InsecureSkipVerify: false,
+	// 	}
+	// }
 
 	producer, err := sarama.NewSyncProducer(servers, config)
 	if err != nil {
