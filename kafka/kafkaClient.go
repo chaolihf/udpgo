@@ -32,3 +32,80 @@ func InitKafka(servers []string) KafkaProducer {
 	}
 	return KafkaProducer{producer: producer}
 }
+
+// 📁 d:\idea project\udpgo\kafka\kafkaClient.go
+func InitKafkaWithAuth(
+	servers []string,
+	saslUser string,
+	saslPassword string,
+	saslMechanism string,
+	// keystorePath string,
+	// keystorePassword string,
+	// truststorePath string,
+) KafkaProducer {
+	config := sarama.NewConfig()
+
+	// 基础生产者配置 (原有逻辑保留)
+	config.Producer.Return.Successes = true
+	config.Producer.RequiredAcks = sarama.WaitForAll
+	config.Producer.Partitioner = sarama.NewRandomPartitioner
+
+	// SASL认证配置 (新增)
+	if saslUser != "" && saslPassword != "" {
+		config.Net.SASL.Enable = true
+		config.Net.SASL.User = saslUser
+		config.Net.SASL.Password = saslPassword
+
+		switch saslMechanism {
+		case "SCRAM-SHA-256":
+			config.Net.SASL.Mechanism = sarama.SASLTypeSCRAMSHA256
+			config.Net.SASL.SCRAMClientGeneratorFunc = func() sarama.SCRAMClient {
+				return &XDGSCRAMClient{HashGeneratorFcn: SHA256}
+			}
+		case "SCRAM-SHA-512":
+			config.Net.SASL.Mechanism = sarama.SASLTypeSCRAMSHA512
+			config.Net.SASL.SCRAMClientGeneratorFunc = func() sarama.SCRAMClient {
+				return &XDGSCRAMClient{HashGeneratorFcn: SHA512}
+			}
+		default:
+			config.Net.SASL.Mechanism = sarama.SASLTypePlaintext
+		}
+	}
+
+	// if keystorePath != "" && truststorePath != "" && keystorePassword != "" {
+	// 	keyPEM, err := os.ReadFile(keystorePassword)
+	// 	if err != nil {
+	// 		panic("加载私钥文件失败: " + err.Error())
+	// 	}
+
+	// 	// 加载证书和私钥
+	// 	keyPair, err := tls.X509KeyPair(
+	// 		readFile(keystorePath), // 证书文件内容
+	// 		keyPEM,                 // 私钥文件内容
+	// 	)
+	// 	if err != nil {
+	// 		panic("证书和私钥文件加载失败: " + err.Error())
+	// 	}
+
+	// 	// 加载CA证书
+	// 	caPEM, err := os.ReadFile(truststorePath)
+	// 	if err != nil {
+	// 		panic("加载CA证书失败: " + err.Error())
+	// 	}
+	// 	certPool := x509.NewCertPool()
+	// 	certPool.AppendCertsFromPEM(caPEM)
+
+	// 	config.Net.TLS.Enable = true
+	// 	config.Net.TLS.Config = &tls.Config{
+	// 		Certificates:       []tls.Certificate{keyPair},
+	// 		RootCAs:            certPool,
+	// 		InsecureSkipVerify: false,
+	// 	}
+	// }
+
+	producer, err := sarama.NewSyncProducer(servers, config)
+	if err != nil {
+		panic(err)
+	}
+	return KafkaProducer{producer: producer}
+}
