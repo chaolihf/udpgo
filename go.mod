@@ -1,4 +1,4 @@
-module github.com/professorshandian/udpgo
+module github.com/chaolihf/udpgo
 
 go 1.18
 
